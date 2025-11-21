@@ -1,0 +1,6 @@
+# .gitignore
+node_modules/
+.env
+*.log
+.DS_Store
+food_assistant.db  # Your old SQLite file
