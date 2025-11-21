@@ -27,19 +27,26 @@ import {
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Load .env file with explicit path
-const envPath = path.join(__dirname, '.env');
-console.log('📁 Loading .env from:', envPath);
-
-const result = dotenv.config({ path: envPath });
-
-if (result.error) {
-  console.error('❌ Error loading .env file:', result.error);
+// Only load .env file in development
+if (process.env.NODE_ENV !== 'production') {
+  const envPath = path.join(__dirname, '.env');
+  console.log('📁 Loading .env from:', envPath);
+  
+  const result = dotenv.config({ path: envPath });
+  if (result.error) {
+    console.error('❌ Error loading .env file:', result.error);
+  } else {
+    console.log('✅ Environment variables loaded from .env file');
+  }
 } else {
-  console.log('✅ .env file loaded successfully');
-  console.log('🔑 SUPABASE_URL exists:', !!process.env.SUPABASE_URL);
-  console.log('🔑 SUPABASE_SERVICE_KEY exists:', !!process.env.SUPABASE_SERVICE_KEY);
-  console.log('🔑 OPENROUTER_API_KEY exists:', !!process.env.OPENROUTER_API_KEY);
+  console.log('🚀 Production mode - using Render environment variables');
+}
+
+console.log('🔍 Checking environment variables:');
+console.log('SUPABASE_URL:', process.env.SUPABASE_URL ? '✅ Present' : '❌ Missing');
+console.log('SUPABASE_SERVICE_KEY:', process.env.SUPABASE_SERVICE_KEY ? '✅ Present' : '❌ Missing');
+console.log('OPENROUTER_API_KEY:', process.env.OPENROUTER_API_KEY ? '✅ Present' : '❌ Missing');
+
 
 
 const app = express();
@@ -327,5 +334,5 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`🍕 Food Assistant backend running on port ${PORT}`);
   console.log(`☁️  Using Supabase database`);
-  console.log(`📍 Deployed to Railway`);
-})};
+  console.log(`📍 Deployed to Render`);
+});
